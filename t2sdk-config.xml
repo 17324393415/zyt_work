@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<t2sdk-configuration>
+	<performance   heartbeatTime="400"
+		           acquireConnWaitTime="3000"  registerTime="15" reconnInterval="3"
+		           localServerName="mctest"   callBackTime="50000" />
+    <parents>
+ 		<parent  parentName="myserver" safeLevel="NONE">
+			<limit licenseFile="classpath:XDAYJJ-HS-UFX-0000_3rd.dat" encrypt="HSBlowfish" />
+			<!--<ssl keyCertFile="ufxclient.pfx" keyCertPwd="zxqh" keyManageAlgorithm="SunX509" />-->
+			<members>
+				<member no="1" address="172.21.50.15" port="9003" charset="GBK" poolSize="1" />
+			</members>
+		</parent>
+
+	</parents>
+	<callBackMethods>
+		<!-- 业务回调 -->
+		<method id="5" className="com.yhfin.yfdw.equity.fx.ufx.callback.CallBack" />
+		<!-- MC使用回调 必须配置 -->
+		<method id="-1" className="com.hundsun.mcapi.MCT2sdkCallback" />
+	</callBackMethods>
+	<logAdapter className="com.hundsun.t2sdk.impl.util.CommonLogAdapter" />
+
+	<!--  消息中心必须增加下面的配置，否则无法订阅  -->
+	<!--  parentName：上级连接名字  cachedir：本地缓存的消息目录 inittimeout：初始化的超时时间   -->
+	<!--  type：1只完成订阅，2只发布 0既能订阅也能发布   -->
+	<mc parentName="as_ufx" type="0" cachedir="mc" inittimeout="3000">
+		<subscriber subname="demo"  subcallback="com.yhfin.yfdw.equity.fx.ufx.callback.McCallBack"  timeout="3000"/>
+		<publisher pubname="demo" msgCount="200" isResetNo="false"/>
+		<mclog dir="mclog"/>
+	</mc>
+</t2sdk-configuration>
